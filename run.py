@@ -2,16 +2,15 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from preprocessing.transforms import encode_categoricals, fill_categorical_missing, fill_numeric_missing, standardize_train_test
-from utils.utils import load_config
+from utils.utils import generate_confusion_matrix, load_config
 from data.loader import load_dataset, get_feature_target
-
 from sklearn.utils import shuffle
-
+# TODO: clean the enums in config file
 def main():
     config = load_config()
     df = load_dataset(config.DATASET_PATH)
 
-    X_df, y = get_feature_target(df, config.FEATURE_COLUMNS, config.TARGET_COLUMN)
+    X_df, y = get_feature_target(df, config.SELECTED_FEATURES, config.TARGET_COLUMN)
 
     X_df = fill_numeric_missing(X_df)
     X_df = fill_categorical_missing(X_df, config.CATEGORICAL_FEATURES)
@@ -49,8 +48,11 @@ def main():
     model.fit(X_train, y_train)
 
     predictions = model.predict(X_test)
-    print(y_test)
-    print(predictions)
+    # TODO: Scatter plot on test set with predictions vs true labels
+
+    confusion_matrix = generate_confusion_matrix(y_test, predictions)
+
+    print("Confusion Matrix:", confusion_matrix)
     acc = accuracy_score(y_test, predictions)
 
     print(f"{class_1} vs {class_2}, Accuracy: {acc * 100:.2f}%")

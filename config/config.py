@@ -1,32 +1,45 @@
 from models.adaline import Adaline
 from models.perceptron import Preceptron
 from enum import Enum
-from dataclasses import dataclass
 
 class ModelType(Enum):
     PERCEPTRON = 0
     ADALINE = 1
 
-class Species(Enum):
+class PenguinClass(Enum):
     ADELIE = 0
     CHINSTRAP = 1
     GENTOO = 2
 
-@dataclass
 class Config:
-    DATASET_PATH = r'data\penguins.csv'
-    CATEGORICAL_FEATURES = ['OriginLocation']
-    TARGET_COLUMN = 'Species'
-    FEATURES_COLUMNS = ['CulmenLength', 'CulmenDepth', 'FlipperLength', 'OriginLocation', 'BodyMass']
-    SELECTED_FEATURES = [Species.ADELIE, Species.CHINSTRAP]
-    FEATURE_COLUMNS = ['BodyMass', 'CulmenLength']
-    TEST_SIZE = 0.4
-    N_ITERS = 1000
-    LEARNING_RATE = 0.01
-    TARGET_CLASSES = ['Adelie', 'Chinstrap', 'Gentoo']
-    MODELS = [Preceptron, Adaline]
-    SELECTED_MODEL = ModelType.PERCEPTRON
-    SELECTED_CLASSES = [Species.ADELIE, Species.CHINSTRAP]
-    BIAS = 0.0
-    MSE_THRESHOLD = 1e-3 if SELECTED_MODEL == ModelType.ADALINE else None
-    
+    _instance = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Config, cls).__new__(cls)
+            inst = cls._instance
+            
+            inst.TEST_SIZE = 0.4
+            inst.DATASET_PATH = r'data\penguins.csv'
+            inst.CATEGORICAL_FEATURES = ['OriginLocation']
+            inst.TARGET_COLUMN = 'Species'
+            inst.FEATURES_COLUMNS = ['CulmenLength', 'CulmenDepth', 'FlipperLength', 'OriginLocation', 'BodyMass']
+            inst.SELECTED_FEATURES = ['CulmenLength', 'BodyMass']
+            inst.N_ITERS = 1000
+            inst.LEARNING_RATE = 0.01
+            inst.BIAS = 0.0
+            inst.MSE_THRESHOLD = 1e-3
+            
+            inst.TARGET_CLASSES = {
+                PenguinClass.ADELIE: 'Adelie',
+                PenguinClass.CHINSTRAP: 'Chinstrap',
+                PenguinClass.GENTOO: 'Gentoo'
+            }
+            inst.MODELS = {
+                ModelType.PERCEPTRON: Preceptron,
+                ModelType.ADALINE: Adaline
+            }
+            
+            inst.SELECTED_MODEL = ModelType.PERCEPTRON
+            inst.SELECTED_CLASSES = [PenguinClass.ADELIE, PenguinClass.CHINSTRAP]
+
+        return cls._instance
