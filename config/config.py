@@ -23,23 +23,24 @@ class Config:
             inst.CATEGORICAL_FEATURES = ['OriginLocation']
             inst.TARGET_COLUMN = 'Species'
             inst.FEATURES_COLUMNS = ['CulmenLength', 'CulmenDepth', 'FlipperLength', 'OriginLocation', 'BodyMass']
-            inst.SELECTED_FEATURES = ['CulmenLength', 'BodyMass']
-            inst.N_ITERS = 1000
-            inst.LEARNING_RATE = 0.01
+            inst.SELECTED_FEATURES = ['CulmenDepth', 'BodyMass']
+            inst.N_ITERS = 5000
+            inst.LEARNING_RATE = 0.001
             inst.BIAS = 0.0
-            inst.MSE_THRESHOLD = 1e-3
+            inst.MSE_THRESHOLD = 1e-4
             
             inst.TARGET_CLASSES = {
                 PenguinClass.ADELIE: 'Adelie',
                 PenguinClass.CHINSTRAP: 'Chinstrap',
                 PenguinClass.GENTOO: 'Gentoo'
             }
+
             inst.MODELS = {
                 ModelType.PERCEPTRON: Preceptron,
                 ModelType.ADALINE: Adaline
             }
             
             inst.SELECTED_MODEL = ModelType.PERCEPTRON
-            inst.SELECTED_CLASSES = [PenguinClass.ADELIE, PenguinClass.CHINSTRAP]
+            inst.SELECTED_CLASSES = [PenguinClass.ADELIE, PenguinClass.GENTOO]
 
         return cls._instance

@@ -1,5 +1,7 @@
 from config.config import Config
 import numpy as np
+
+
 def load_config():
     return Config()
 
